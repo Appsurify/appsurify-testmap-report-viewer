@@ -1,9 +1,10 @@
 import {
-    Container, Heading, Text, VStack,
+    Container,
+    VStack,
 } from '@chakra-ui/react';
 import {useReport} from "./context/ReportContext.tsx";
 import UploadArea from "./components/UploadArea.tsx";
-import ReportViewerLayout from "./components/ReportViewerLayout.tsx";
+import ReportViewerLayout from "./layouts/ReportViewerLayout.tsx";
 
 
 function App() {
@@ -11,23 +12,11 @@ function App() {
 
     return (
         <VStack>
-            <Heading>
-                <Text>UI Coverage report viewer</Text>
-            </Heading>
+            <Container minWidth='max-content'>
 
-            <Container
-                border={'1px'} borderColor='gray.200'
-                minWidth='max-content'
-            >
-            {!report.report ? (
-              <UploadArea />
-            ) : (
-              <ReportViewerLayout />
-            )}
+            {!report.report ? ( <UploadArea /> ) : ( <ReportViewerLayout /> )}
 
             </Container>
-
-
         </VStack>
     );
 }

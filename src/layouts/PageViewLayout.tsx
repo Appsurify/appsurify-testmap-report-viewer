@@ -1,16 +1,15 @@
-import {Box, Flex, Text, useColorModeValue} from '@chakra-ui/react';
+import {
+    Box, Flex, Text,
+} from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { usePage } from '../context/PageContext';
 import { useSnapshot } from '../context/SnapshotContext';
-import PageList from './PageList';
+import PageList from '../components/PageList';
 import SnapshotViewLayout from "./SnapshotViewLayout.tsx";
 
 export default function PageViewLayout() {
   const { page, pages, setPage } = usePage();
   const { setSnapshot, setSnapshots } = useSnapshot();
-
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
-  const bg = useColorModeValue('gray.50', 'gray.800');
 
   useEffect(() => {
       if (!page) {
@@ -28,32 +27,16 @@ export default function PageViewLayout() {
 
   return (
     <Flex flex="1" overflow="hidden">
+
       {/* COLUMN: PAGES */}
-      <Box
-        width="220px"
-        borderRight="1px solid"
-        borderColor={borderColor}
-        p={4}
-        overflowY="auto"
-        bg={bg}
-      >
+      <Box width="220px" p={4} overflowY="auto">
         <PageList />
       </Box>
 
-     {/* COLUMN: Snapshot View Layout */}
-      <Box
-        borderRight="1px solid"
-        borderColor={borderColor}
-        p={4}
-        overflowY="auto"
-      >
-
+      {/* COLUMN: Snapshot View Layout */}
+      <Box p={4} overflowY="auto">
           <SnapshotViewLayout />
-
-
       </Box>
-
-
 
     </Flex>
   );

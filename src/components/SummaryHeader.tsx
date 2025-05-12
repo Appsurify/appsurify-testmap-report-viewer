@@ -46,7 +46,10 @@ export default function SummaryHeader() {
             Test Report
           </Heading>
           <Text fontSize="sm" color="gray.500" noOfLines={1}>
-            {report.test.fullTitle}
+            TestSuite: {report.test.suite?.title}
+          </Text>
+          <Text fontSize="sm" color="gray.500" noOfLines={1}>
+            TestCase: {report.test.title}
           </Text>
           <Text fontSize="sm" color="gray.500" noOfLines={1}>
             Spec: {report.spec.relative}

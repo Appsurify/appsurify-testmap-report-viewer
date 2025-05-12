@@ -5,7 +5,6 @@ export type RRWebEvent = eventWithTime & {
   testEventId?: string;
 }
 
-
 export interface RRWebNode {
     id: number;
     tagName: string;
@@ -15,7 +14,6 @@ export interface RRWebNode {
     testEventId?: string;
     rrWebEventId?: string | number;
 }
-
 
 export type TestEventLog = {
   alias?: string;
@@ -126,7 +124,6 @@ export type TestRunUICoverageReport = {
     pages: TestRunUICoveragePage[];
 };
 
-
 export type TestRunUICoveragePage = {
     id: string;
     href: string;
@@ -144,7 +141,6 @@ export type TestRunUICoveragePage = {
         uniqueInteractionCoveragePercent: number;
     }
 };
-
 
 export type TestRunUICoveragePageSnapshot = {
     id: string;
