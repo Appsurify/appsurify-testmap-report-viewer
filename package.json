@@ -1,0 +1,40 @@
+{
+  "name": "ui-report-viewer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@appsurify-testmap/rrweb": "file:/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/rrweb",
+    "@appsurify-testmap/rrweb-player": "file:/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/rrweb-player",
+    "@appsurify-testmap/rrweb-plugin-sequential-id-record": "file:/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/plugins/rrweb-plugin-sequential-id-record",
+    "@appsurify-testmap/rrweb-plugin-sequential-id-replay": "file:/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/plugins/rrweb-plugin-sequential-id-replay",
+    "@appsurify-testmap/rrweb-snapshot": "file:/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/rrweb-snapshot",
+    "@appsurify-testmap/rrweb-types": "file:/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/types",
+    "@chakra-ui/icons": "^2.2.4",
+    "@chakra-ui/react": "^2.3.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-dropzone": "^14.3.8",
+    "react-icons": "^5.5.0",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vite": "^5.3.1"
+  }
+}
