@@ -10,12 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@appsurify-testmap/rrweb": "file:/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/rrweb",
-    "@appsurify-testmap/rrweb-player": "file:/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/rrweb-player",
-    "@appsurify-testmap/rrweb-plugin-sequential-id-record": "file:/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/plugins/rrweb-plugin-sequential-id-record",
-    "@appsurify-testmap/rrweb-plugin-sequential-id-replay": "file:/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/plugins/rrweb-plugin-sequential-id-replay",
-    "@appsurify-testmap/rrweb-snapshot": "file:/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/rrweb-snapshot",
-    "@appsurify-testmap/rrweb-types": "file:/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/types",
+    "@appsurify-testmap/rrweb": "^2.1.0-alpha.2",
+    "@appsurify-testmap/rrweb-player": "^2.1.0-alpha.2",
+    "@appsurify-testmap/rrweb-plugin-sequential-id-record": "^2.1.0-alpha.2",
+    "@appsurify-testmap/rrweb-plugin-sequential-id-replay": "^2.1.0-alpha.2",
+    "@appsurify-testmap/rrweb-snapshot": "^2.1.0-alpha.2",
+    "@appsurify-testmap/rrweb-types": "^2.1.0-alpha.2",
     "@chakra-ui/icons": "^2.2.4",
     "@chakra-ui/react": "^2.3.4",
     "react": "^19.1.0",
