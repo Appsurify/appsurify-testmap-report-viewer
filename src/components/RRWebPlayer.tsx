@@ -22,6 +22,8 @@ const RRWebPlayer = forwardRef<RRWebPlayerRef, Props>(({rrWebEvents}, ref) => {
     useEffect(() => {
         if (!playerElRef.current || rrWebEvents.length === 0) return;
 
+        playerElRef.current.innerHTML = ''
+
         playerRef.current = new rrwebPlayer({
           target: playerElRef.current!,
           props: {
@@ -39,7 +41,7 @@ const RRWebPlayer = forwardRef<RRWebPlayerRef, Props>(({rrWebEvents}, ref) => {
 
         return () => {
             playerRef.current?.pause();
-            playerRef.current?.$destroy();
+            playerRef.current?.getReplayer().destroy();
         };
     }, [rrWebEvents]);
 
