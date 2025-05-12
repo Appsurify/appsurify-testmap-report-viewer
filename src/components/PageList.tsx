@@ -27,7 +27,7 @@ export default function PageList() {
         const coverage = p.stats?.uniqueInteractionCoveragePercent ?? 0;
         const arrowType = coverage > 10 ? 'increase' : 'decrease';
         const total = p.stats?.totalVisibleInteractiveNodes ?? 0;
-        const interacted = p.stats?.interactedInteractiveNodes ?? 0;
+        const interacted = p.stats?.uniqueInteractedInteractiveNodes ?? 0;
 
         return (
           <Tooltip key={p.id} label={p.href} placement="right">

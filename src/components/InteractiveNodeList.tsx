@@ -8,18 +8,19 @@ import {
 import { useSnapshot } from '../context/SnapshotContext';
 import { useMemo } from 'react';
 import type { RRWebPlayerRef } from './RRWebPlayer';
+import type {TestEvent} from "../types";
 
 interface Props {
   playerRef: React.RefObject<RRWebPlayerRef | null>;
+  onSelectTestEvent?: (event: TestEvent) => void;
+  selectedNodeId?: number | null;
 }
 
-export default function InteractiveNodeList({ playerRef }: Props) {
+// @ts-ignore
+export default function InteractiveNodeList({ playerRef, onSelectTestEvent, selectedNodeId }: Props) {
   const { snapshot } = useSnapshot();
   const nodes = snapshot?.visibleInteractiveNodes ?? [];
   const rrwebNodes = snapshot?.rrwebNodes ?? [];
-
-  const greenColor = 'rgba(0, 255, 0, 0.3)';
-  const redColor = 'rgba(255, 0, 0, 0.3)';
 
   const isTested = (nodeId: number) =>
     rrwebNodes.some((r) => r.id === nodeId && r.testEventId);
@@ -42,7 +43,7 @@ export default function InteractiveNodeList({ playerRef }: Props) {
         <List spacing={2}>
           {sortedNodes.map((node) => {
             const tested = isTested(node.id);
-            const color = tested ? greenColor : redColor;
+            const isSelected = selectedNodeId === node.id;
 
             return (
               <ListItem
@@ -50,19 +51,30 @@ export default function InteractiveNodeList({ playerRef }: Props) {
                 p={2}
                 borderLeft="4px solid"
                 borderColor={tested ? 'green.200' : 'red.200'}
-                bg={tested ? 'green.50' : 'red.50'}
+                bg={isSelected ? (tested ? 'green.100' : 'red.100') : tested ? 'green.50' : 'red.50'}
                 borderRadius="md"
-                _hover={{ opacity: 0.9 }}
-                onMouseEnter={() => playerRef.current?.highlightNode(node.id, color)}
+                cursor="pointer"
+                onClick={() => {
+                  if (!tested) return;
+
+                  const rrwebNode = [...rrwebNodes].reverse().find(r => r.id === node.id);
+                  const testEvent = [...snapshot.testEvents].reverse().find(e => e.id === rrwebNode?.testEventId);
+
+                  if (testEvent && onSelectTestEvent) {
+                    onSelectTestEvent(testEvent);
+                  }
+                }}
               >
                 <Text fontSize="sm" fontWeight="medium">
                   {node.tagName} #{node.id}
                 </Text>
+
                 {node.xPath && (
                   <Text fontSize="xs" color="gray.500" noOfLines={1}>
                     {node.xPath}
                   </Text>
                 )}
+
               </ListItem>
             );
           })}

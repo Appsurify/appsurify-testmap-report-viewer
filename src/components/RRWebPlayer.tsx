@@ -35,7 +35,7 @@ const RRWebPlayer = forwardRef<RRWebPlayerRef, Props>(({rrWebEvents}, ref) => {
               height: 480,
               mouseTail: false,
               pauseAnimation: true,
-              useVirtualDom: true
+              useVirtualDom: true,
           },
         });
 

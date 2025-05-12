@@ -8,15 +8,16 @@ import {
   useColorModeValue,
   HStack,
 } from '@chakra-ui/react';
-import type { TestEvent } from '../types';
+import type {RRWebNode, TestEvent} from '../types';
 
 export interface TestEventListProps {
   testEvents: TestEvent[];
+  testNodes?: RRWebNode[],
   selectedId: string | null;
   onSelect?: (testEvent: TestEvent) => void;
 }
 
-export default function TestEventList({ testEvents, selectedId, onSelect }: TestEventListProps) {
+export default function TestEventList({ testEvents, testNodes, selectedId, onSelect }: TestEventListProps) {
   const getStateColor = (state: string) => {
     switch (state) {
       case 'passed':
@@ -41,6 +42,13 @@ export default function TestEventList({ testEvents, selectedId, onSelect }: Test
       <List spacing={1}>
         {testEvents.map((event) => {
           const isSelected = selectedId === event.id;
+          const rrwebNodes = Array.from(
+            new Map(
+              testNodes
+                        ?.filter(n => n.testEventId === event.id)
+                        .map(n => [n.id, n]) // ключ — id, значение — сам узел
+                    )?.values() || []
+                  );
 
           return (
             <ListItem
@@ -54,10 +62,15 @@ export default function TestEventList({ testEvents, selectedId, onSelect }: Test
             >
               <Box>
                 <Text fontSize="sm" fontWeight="medium" noOfLines={1}>
-                  <Badge colorScheme={getStateColor(event.state)}>{event.state}</Badge> {event.name}
+                  <Badge colorScheme={getStateColor(event.state)}>{event.state}</Badge> {event.name}  ({event.args.join(', ')})
                 </Text>
                 <HStack spacing={2} fontSize="xs" color="gray.500">
-                  <Text>{event.args.join(', ')}</Text>
+                  <Text>{event.timestamp}</Text>
+                  {rrwebNodes?.length ? (
+                    <Text>
+                      ↳ {rrwebNodes.map(n => `${n.tagName} #${n.id}`).join(', ')}
+                    </Text>
+                  ) : null}
                 </HStack>
               </Box>
             </ListItem>

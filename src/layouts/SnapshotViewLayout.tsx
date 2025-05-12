@@ -7,12 +7,12 @@ import {
 } from '@chakra-ui/react';
 import {useEffect, useRef, useState} from 'react';
 import { useSnapshot } from '../context/SnapshotContext';
-import SnapshotNavigator from './SnapshotNavigator';
-import InteractiveNodeList from './InteractiveNodeList';
-import TestEventList from './TestEventList';
-import RRWebPlayer, {type RRWebPlayerRef} from "./RRWebPlayer.tsx";
+import SnapshotNavigator from '../components/SnapshotNavigator';
+import InteractiveNodeList from '../components/InteractiveNodeList';
+import TestEventList from '../components/TestEventList';
+import RRWebPlayer, {type RRWebPlayerRef} from "../components/RRWebPlayer.tsx";
 import type {TestEvent} from "../types";
-import SnapshotMetaInfo from "./SnapshotMetaInfo.tsx";
+import SnapshotMetaInfo from "../components/SnapshotMetaInfo.tsx";
 
 
 export default function SnapshotViewLayout() {
@@ -20,6 +20,7 @@ export default function SnapshotViewLayout() {
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   const playerRef = useRef<RRWebPlayerRef>(null);
+
   useEffect(() => {
     if (!snapshot && snapshots.length > 0) {
       setSnapshot(snapshots[0]);
@@ -35,68 +36,60 @@ export default function SnapshotViewLayout() {
     return <Text color="red.500" p={6}>Snapshot not found</Text>;
   }
 
-  const isTested = (nodeId: number) =>
-    snapshot.rrwebNodes.some((r) => r.id === nodeId && r.testEventId);
-
-  const testedCount = snapshot.visibleInteractiveNodes.filter((n) =>
-    isTested(n.id)
-  ).length;
 
   const handleSelectTestEvent = (testEvent: TestEvent) => {
       setSelectedEventId(testEvent.id);
       const rrEvent = [...snapshot.rrwebEvents].reverse().find(e => e.testEventId === testEvent.id);
       if (rrEvent) {
           playerRef.current?.seekToTimestamp(rrEvent.timestamp);
+      }
 
+      const relatedNodes = snapshot.rrwebNodes.filter(n => n.testEventId === testEvent.id);
+      const uniqueNodes = Array.from(new Map(relatedNodes.map(n => [n.id, n])).values());
+
+      for (const node of uniqueNodes) {
+        playerRef.current?.highlightNode(node.id, 'rgba(0, 255, 0, 0.3)');
       }
   };
+  const selectedNodeId = snapshot.rrwebNodes.find(n => n.testEventId === selectedEventId)?.id ?? null;
 
   return (
     <VStack align="stretch" spacing={4} height="100%">
+
       <SnapshotNavigator />
 
       <Flex flex="1" width="100%" gap={4} overflow="hidden">
-        {/* Левая колонка */}
-        <Box
-          width="260px"
-          flexShrink={0}
-          overflowY="auto"
-          borderRight="1px solid"
-          borderColor="gray.200"
-          pr={2}
-        >
+
+        <Box width="260px" flexShrink={0} overflowY="auto" pr={2}>
+
           <Text fontSize="sm" fontWeight="semibold" mb={2}>
-            DOM Elements <Badge colorScheme="green">{testedCount} / {snapshot.visibleInteractiveNodes.length}</Badge>
+            DOM Elements <Badge colorScheme="green">{snapshot.stats.uniqueInteractedInteractiveNodes} / {snapshot.stats.totalVisibleInteractiveNodes}</Badge>
           </Text>
-          <InteractiveNodeList playerRef={playerRef} />
+
+          <InteractiveNodeList playerRef={playerRef} onSelectTestEvent={handleSelectTestEvent} selectedNodeId={selectedNodeId} />
+
         </Box>
 
-        {/* Центральная колонка */}
         <Box flex="1" minWidth="300px" overflow="hidden">
+
           <SnapshotMetaInfo snapshot={snapshot} />
 
           <RRWebPlayer rrWebEvents={snapshot.rrwebEvents} ref={playerRef} />
+
         </Box>
 
-        {/* Правая колонка */}
-        <Box
-          width="320px"
-          flexShrink={0}
-          overflowY="auto"
-          borderLeft="1px solid"
-          borderColor="gray.200"
-          pl={2}
-        >
+        <Box width="320px" flexShrink={0} overflowY="auto" pl={2}>
+
           <Text fontSize="sm" fontWeight="semibold" mb={2}>
             Test Events
           </Text>
-          <TestEventList
-            testEvents={snapshot.testEvents}
-            selectedId={selectedEventId}
-            onSelect={handleSelectTestEvent}
-          />
+
+          <TestEventList testEvents={snapshot.testEvents} testNodes={snapshot.rrwebNodes} selectedId={selectedEventId} onSelect={handleSelectTestEvent} />
+
         </Box>
+
       </Flex>
+
     </VStack>
   );
 }
