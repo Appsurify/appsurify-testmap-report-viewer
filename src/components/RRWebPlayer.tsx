@@ -11,6 +11,7 @@ export interface RRWebPlayerRef {
   seekToEvent: (eventId: number) => void;
   seekToTimestamp: (timestamp: number) => void;
   highlightNode: (nodeId: number, color?: string) => void;
+  clearHighlight: (nodeId: number) => void;
   getMetaData: () => ReturnType<rrwebPlayer['getMetaData']> | undefined;
   getMirror: () => ReturnType<rrwebPlayer['getMirror']> | undefined;
 }
@@ -30,12 +31,13 @@ const RRWebPlayer = forwardRef<RRWebPlayerRef, Props>(({rrWebEvents}, ref) => {
               // @ts-ignore
               events: rrWebEvents,
               autoPlay: false,
-              showController: false,
+              showController: true,
               width: 640,
               height: 480,
               mouseTail: false,
               pauseAnimation: true,
               useVirtualDom: true,
+
           },
         });
 
@@ -64,6 +66,7 @@ const RRWebPlayer = forwardRef<RRWebPlayerRef, Props>(({rrWebEvents}, ref) => {
 
         highlightNode(nodeId: number, color = 'rgba(255, 0, 0, 0.3)') {
             const mirror = playerRef.current?.getMirror();
+            console.debug('[highlightNode]', nodeId, mirror?.getNode(nodeId), mirror);
             const el = mirror?.getNode(nodeId) as HTMLElement | null;
 
             if (el) {
@@ -74,6 +77,14 @@ const RRWebPlayer = forwardRef<RRWebPlayerRef, Props>(({rrWebEvents}, ref) => {
                     el.style.backgroundColor = '';
                 }, 1000);
             }
+        },
+
+        clearHighlight(nodeId: number) {
+          const el = playerRef.current?.getMirror()?.getNode(nodeId) as HTMLElement | null;
+          if (el) {
+            el.style.outline = '';
+            el.style.backgroundColor = '';
+          }
         },
 
         getMetaData: () => playerRef.current?.getMetaData(),

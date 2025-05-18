@@ -11,7 +11,7 @@ import SnapshotNavigator from '../components/SnapshotNavigator';
 import InteractiveNodeList from '../components/InteractiveNodeList';
 import TestEventList from '../components/TestEventList';
 import RRWebPlayer, {type RRWebPlayerRef} from "../components/RRWebPlayer.tsx";
-import type {TestEvent} from "../types";
+// import type {TestEvent} from "../types";
 import SnapshotMetaInfo from "../components/SnapshotMetaInfo.tsx";
 
 
@@ -37,22 +37,16 @@ export default function SnapshotViewLayout() {
   }
 
 
-  const handleSelectTestEvent = (testEvent: TestEvent) => {
-      setSelectedEventId(testEvent.id);
-      const rrEvent = [...snapshot.rrwebEvents].reverse().find(e => e.testEventId === testEvent.id);
-      if (rrEvent) {
-          playerRef.current?.seekToTimestamp(rrEvent.timestamp);
-      }
-
-      const relatedNodes = snapshot.rrwebNodes.filter(n => n.testEventId === testEvent.id);
-      const uniqueNodes = Array.from(new Map(relatedNodes.map(n => [n.id, n])).values());
-
-      for (const node of uniqueNodes) {
-        playerRef.current?.highlightNode(node.id, 'rgba(0, 255, 0, 0.3)');
-      }
+  const handleSelectTestEvent = (testEvent: any) => {
+        setSelectedEventId(testEvent.id);
+        playerRef.current?.seekToTimestamp?.(testEvent.timestamp);
+        const node = testEvent.payload?.element?.id;
+        if (node != null) {
+          playerRef.current?.highlightNode?.(node, 'rgba(0, 255, 0, 0.3)');
+        }
   };
-  const selectedNodeId = snapshot.rrwebNodes.find(n => n.testEventId === selectedEventId)?.id ?? null;
-
+  // const selectedNodeId = snapshot.interactedElements.find(n => n.testEventId === selectedEventId)?.id ?? null;
+    const selectedNodeId = null;
   return (
     <VStack align="stretch" spacing={4} height="100%">
 
@@ -63,7 +57,7 @@ export default function SnapshotViewLayout() {
         <Box width="260px" flexShrink={0} overflowY="auto" pr={2}>
 
           <Text fontSize="sm" fontWeight="semibold" mb={2}>
-            DOM Elements <Badge colorScheme="green">{snapshot.stats.uniqueInteractedInteractiveNodes} / {snapshot.stats.totalVisibleInteractiveNodes}</Badge>
+            DOM Elements <Badge colorScheme="green">{snapshot.interactedElementCount} / {snapshot.totalElementCount}</Badge>
           </Text>
 
           <InteractiveNodeList playerRef={playerRef} onSelectTestEvent={handleSelectTestEvent} selectedNodeId={selectedNodeId} />
@@ -74,7 +68,7 @@ export default function SnapshotViewLayout() {
 
           <SnapshotMetaInfo snapshot={snapshot} />
 
-          <RRWebPlayer rrWebEvents={snapshot.rrwebEvents} ref={playerRef} />
+          <RRWebPlayer rrWebEvents={snapshot.events} ref={playerRef} />
 
         </Box>
 
@@ -84,7 +78,7 @@ export default function SnapshotViewLayout() {
             Test Events
           </Text>
 
-          <TestEventList testEvents={snapshot.testEvents} testNodes={snapshot.rrwebNodes} selectedId={selectedEventId} onSelect={handleSelectTestEvent} />
+          <TestEventList events={snapshot.events} testNodes={snapshot.interactedElements} selectedId={selectedEventId} onSelect={handleSelectTestEvent} />
 
         </Box>
 
