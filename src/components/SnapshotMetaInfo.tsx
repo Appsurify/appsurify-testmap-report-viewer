@@ -6,28 +6,28 @@ export interface SnapshotMetaInfoProps {
 }
 
 export default function SnapshotMetaInfo({ snapshot }: SnapshotMetaInfoProps) {
-  const { testEventId, meta, visibleInteractiveNodes, rrwebNodes, testEvents } = snapshot;
+  const { events, totalElementCount, interactedElementCount, coveragePercent } = snapshot;
 
-  const testedCount = visibleInteractiveNodes.filter((node) =>
-    rrwebNodes.some((r) => r.id === node.id && r.testEventId)
-  ).length;
+  const testedCount = interactedElementCount;
+  // @ts-ignore
+  const firstMeta = events.find((e) => e.type === 4);
+  // const eventName =
+  //   testEventId &&
+  //   testEvents.find((e) => e.id === testEventId)?.name;
 
-  const eventName =
-    testEventId &&
-    testEvents.find((e) => e.id === testEventId)?.name;
+    // @ts-ignore
+    const width = firstMeta?.data.width || 0;
+    // @ts-ignore
+    const height = firstMeta?.data.height || 0;
 
-  const coveragePercent = (
-    (testedCount / Math.max(1, visibleInteractiveNodes.length)) * 100
-  ).toFixed(1);
 
   return (
     <Box px={4} py={2}>
-      <Text fontSize="sm" fontWeight="medium">
-        Last Test Event: {eventName || testEventId || '—'}
-      </Text>
+
       <Text fontSize="xs" color="gray.500">
-        Resolution: {meta.width}×{meta.height} •{' '}
-        {testedCount} / {visibleInteractiveNodes.length} interactive ({coveragePercent}%)
+
+        Resolution: {width}×{height} •{' '}
+        {testedCount} / {totalElementCount} interactive ({coveragePercent}%)
       </Text>
     </Box>
   );

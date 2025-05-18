@@ -24,10 +24,10 @@ export default function PageList() {
       {pages.map((p) => {
         const isSelected = page?.id === p.id;
         const url = new URL(p.href);
-        const coverage = p.stats?.uniqueInteractionCoveragePercent ?? 0;
+        const coverage = p.coveragePercent ?? 0;
         const arrowType = coverage > 10 ? 'increase' : 'decrease';
-        const total = p.stats?.totalVisibleInteractiveNodes ?? 0;
-        const interacted = p.stats?.uniqueInteractedInteractiveNodes ?? 0;
+        const total = p.totalElementCount ?? 0;
+        const interacted = p.interactedElementCount ?? 0;
 
         return (
           <Tooltip key={p.id} label={p.href} placement="right">
