@@ -1,16 +1,16 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
-import type { TestRunUICoverageReport } from '../types';
+import type { UICoverageReport } from '../types';
 
 
 interface ReportContextType {
-  report: TestRunUICoverageReport | null;
-  setReport: (report: TestRunUICoverageReport) => void;
+  report: UICoverageReport | null;
+  setReport: (report: UICoverageReport) => void;
 }
 
 const ReportContext = createContext<ReportContextType | undefined>(undefined);
 
 export function ReportProvider({ children }: { children: ReactNode }) {
-  const [report, setReport] = useState<TestRunUICoverageReport | null>(null);
+  const [report, setReport] = useState<UICoverageReport | null>(null);
   return (
     <ReportContext.Provider value={{ report, setReport }}>
       {children}

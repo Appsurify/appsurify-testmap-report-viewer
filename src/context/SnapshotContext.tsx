@@ -1,19 +1,19 @@
 import {createContext, useContext, useState, type ReactNode, useEffect} from 'react';
-import type { TestRunUICoveragePageSnapshot } from '../types';
+import type { UICoveragePageSnapshot } from '../types';
 
 interface SnapshotContextType {
-  snapshot: TestRunUICoveragePageSnapshot | null;
-  setSnapshot: (snapshot: TestRunUICoveragePageSnapshot | null) => void;
-  snapshots: TestRunUICoveragePageSnapshot[];
-  setSnapshots: (snapshots: TestRunUICoveragePageSnapshot[]) => void;
+  snapshot: UICoveragePageSnapshot | null;
+  setSnapshot: (snapshot: UICoveragePageSnapshot | null) => void;
+  snapshots: UICoveragePageSnapshot[];
+  setSnapshots: (snapshots: UICoveragePageSnapshot[]) => void;
   selectSnapshotById: (id: string) => void;
 }
 
 const SnapshotContext = createContext<SnapshotContextType | undefined>(undefined);
 
 export function SnapshotProvider({ children }: { children: ReactNode }) {
-  const [snapshot, setSnapshot] = useState<TestRunUICoveragePageSnapshot | null>(null);
-  const [snapshots, setSnapshots] = useState<TestRunUICoveragePageSnapshot[]>([]);
+  const [snapshot, setSnapshot] = useState<UICoveragePageSnapshot | null>(null);
+  const [snapshots, setSnapshots] = useState<UICoveragePageSnapshot[]>([]);
 
   useEffect(() => {
     if (!snapshot && snapshots.length > 0) {

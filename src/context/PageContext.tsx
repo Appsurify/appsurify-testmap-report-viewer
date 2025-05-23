@@ -1,19 +1,19 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
-import type { TestRunUICoveragePage } from '../types';
+import type { UICoveragePage } from '../types';
 
 interface PageContextType {
-  page: TestRunUICoveragePage | null;
-  setPage: (page: TestRunUICoveragePage | null) => void;
-  pages: TestRunUICoveragePage[];
-  setPages: (pages: TestRunUICoveragePage[]) => void;
+  page: UICoveragePage | null;
+  setPage: (page: UICoveragePage | null) => void;
+  pages: UICoveragePage[];
+  setPages: (pages: UICoveragePage[]) => void;
   selectPageById: (id: string) => void;
 }
 
 const PageContext = createContext<PageContextType | undefined>(undefined);
 
 export function PageProvider({ children }: { children: ReactNode }) {
-  const [page, setPage] = useState<TestRunUICoveragePage | null>(null);
-  const [pages, setPages] = useState<TestRunUICoveragePage[]>([]);
+  const [page, setPage] = useState<UICoveragePage | null>(null);
+  const [pages, setPages] = useState<UICoveragePage[]>([]);
 
   function selectPageById(id: string) {
     const page = pages.find((p) => p.id === id) ?? null;
