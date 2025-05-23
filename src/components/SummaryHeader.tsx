@@ -46,23 +46,21 @@ export default function SummaryHeader() {
             Test Report
           </Heading>
           <Text fontSize="sm" color="gray.500" noOfLines={1}>
-            TestSuite: {report.test.suite?.title}
+            TestSuite: {''}
           </Text>
           <Text fontSize="sm" color="gray.500" noOfLines={1}>
-            TestCase: {report.test.title}
+            TestCase: {''}
           </Text>
           <Text fontSize="sm" color="gray.500" noOfLines={1}>
-            Spec: {report.spec.relative}
+            Spec: {''}
           </Text>
           <HStack mt={1}>
-            <Badge colorScheme={report.test.state === 'passed' ? 'green' : 'red'}>
-              {report.test.state}
+            <Badge colorScheme='green'>
+              passed
             </Badge>
-            {report.test.duration !== undefined && (
-              <Text fontSize="xs" color="gray.400">
-                Duration: {report.test.duration} ms
-              </Text>
-            )}
+            <Text fontSize="xs" color="gray.400">
+              Duration: 600 ms
+            </Text>
           </HStack>
         </Box>
 

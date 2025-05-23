@@ -5,19 +5,20 @@ import {
   VStack,
   Flex,
 } from '@chakra-ui/react';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef} from 'react';
 import { useSnapshot } from '../context/SnapshotContext';
 import SnapshotNavigator from '../components/SnapshotNavigator';
-import InteractiveNodeList from '../components/InteractiveNodeList';
-import TestEventList from '../components/TestEventList';
 import RRWebPlayer, {type RRWebPlayerRef} from "../components/RRWebPlayer.tsx";
-// import type {TestEvent} from "../types";
 import SnapshotMetaInfo from "../components/SnapshotMetaInfo.tsx";
-
+import ElementList from "../components/ElementList.tsx";
+import ActionList from "../components/ActionList.tsx";
+import {useSelection} from "../context/SelectionContext.tsx";
+import type {UICoverageAction} from "../types";
 
 export default function SnapshotViewLayout() {
   const { snapshot, setSnapshot, snapshots } = useSnapshot();
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+
+  const { resetSelection } = useSelection();
 
   const playerRef = useRef<RRWebPlayerRef>(null);
 
@@ -28,7 +29,7 @@ export default function SnapshotViewLayout() {
   }, [snapshot, setSnapshot, snapshots]);
 
   useEffect(() => {
-      setSelectedEventId(null);
+      resetSelection();
   }, [snapshot?.id]);
 
 
@@ -37,16 +38,11 @@ export default function SnapshotViewLayout() {
   }
 
 
-  const handleSelectTestEvent = (testEvent: any) => {
-        setSelectedEventId(testEvent.id);
-        playerRef.current?.seekToTimestamp?.(testEvent.timestamp);
-        const node = testEvent.payload?.element?.id;
-        if (node != null) {
-          playerRef.current?.highlightNode?.(node, 'rgba(0, 255, 0, 0.3)');
-        }
+  const handleSelectAction = (action: UICoverageAction) => {
+        playerRef.current?.seekToTimestamp?.(action.timestamp);
   };
   // const selectedNodeId = snapshot.interactedElements.find(n => n.testEventId === selectedEventId)?.id ?? null;
-    const selectedNodeId = null;
+  // const selectedNodeId = null;
   return (
     <VStack align="stretch" spacing={4} height="100%">
 
@@ -60,7 +56,7 @@ export default function SnapshotViewLayout() {
             DOM Elements <Badge colorScheme="green">{snapshot.interactedElementCount} / {snapshot.totalElementCount}</Badge>
           </Text>
 
-          <InteractiveNodeList playerRef={playerRef} onSelectTestEvent={handleSelectTestEvent} selectedNodeId={selectedNodeId} />
+          <ElementList playerRef={playerRef} />
 
         </Box>
 
@@ -68,7 +64,7 @@ export default function SnapshotViewLayout() {
 
           <SnapshotMetaInfo snapshot={snapshot} />
 
-          <RRWebPlayer rrWebEvents={snapshot.events} ref={playerRef} />
+          <RRWebPlayer events={snapshot.events} ref={playerRef} />
 
         </Box>
 
@@ -78,7 +74,7 @@ export default function SnapshotViewLayout() {
             Test Events
           </Text>
 
-          <TestEventList events={snapshot.events} testNodes={snapshot.interactedElements} selectedId={selectedEventId} onSelect={handleSelectTestEvent} />
+          <ActionList actions={snapshot.actions} onSelect={handleSelectAction} />
 
         </Box>
 

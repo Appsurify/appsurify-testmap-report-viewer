@@ -1,14 +1,19 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import rrwebPlayer from '@appsurify-testmap/rrweb-player';
-import {Box} from "@chakra-ui/react";
-import type {RRWebEvent} from "../types";
+import type {
+    eventWithTime,
+} from '@appsurify-testmap/rrweb-types';
+import {
+    Box
+} from '@chakra-ui/react';
+
 
 interface Props {
-  rrWebEvents: RRWebEvent[];
+  events: eventWithTime[];
 }
 
 export interface RRWebPlayerRef {
-  seekToEvent: (eventId: number) => void;
+  seekToAction: (actionId: number) => void;
   seekToTimestamp: (timestamp: number) => void;
   highlightNode: (nodeId: number, color?: string) => void;
   clearHighlight: (nodeId: number) => void;
@@ -16,12 +21,12 @@ export interface RRWebPlayerRef {
   getMirror: () => ReturnType<rrwebPlayer['getMirror']> | undefined;
 }
 
-const RRWebPlayer = forwardRef<RRWebPlayerRef, Props>(({rrWebEvents}, ref) => {
+const RRWebPlayer = forwardRef<RRWebPlayerRef, Props>(({events}, ref) => {
     const playerElRef = useRef<HTMLDivElement>(null);
     const playerRef = useRef<rrwebPlayer | null>(null);
 
     useEffect(() => {
-        if (!playerElRef.current || rrWebEvents.length === 0) return;
+        if (!playerElRef.current || events.length === 0) return;
 
         playerElRef.current.innerHTML = ''
 
@@ -29,7 +34,7 @@ const RRWebPlayer = forwardRef<RRWebPlayerRef, Props>(({rrWebEvents}, ref) => {
           target: playerElRef.current!,
           props: {
               // @ts-ignore
-              events: rrWebEvents,
+              events: events,
               autoPlay: false,
               showController: true,
               width: 640,
@@ -45,12 +50,12 @@ const RRWebPlayer = forwardRef<RRWebPlayerRef, Props>(({rrWebEvents}, ref) => {
             playerRef.current?.pause();
             playerRef.current?.getReplayer().destroy();
         };
-    }, [rrWebEvents]);
+    }, [events]);
 
     // Публичные методы
     useImperativeHandle(ref, () => ({
-        seekToEvent(eventId: number) {
-            const event = rrWebEvents.find((e: any) => e.id === eventId);
+        seekToAction(actionId: number) {
+            const event = events.find((e: any) => e.id === actionId);
             const startTime = this.getMetaData()?.startTime;
             if (event && playerRef.current && startTime) {
                 playerRef.current.goto(event.timestamp - startTime + 1);
@@ -66,25 +71,22 @@ const RRWebPlayer = forwardRef<RRWebPlayerRef, Props>(({rrWebEvents}, ref) => {
 
         highlightNode(nodeId: number, color = 'rgba(255, 0, 0, 0.3)') {
             const mirror = playerRef.current?.getMirror();
-            console.debug('[highlightNode]', nodeId, mirror?.getNode(nodeId), mirror);
             const el = mirror?.getNode(nodeId) as HTMLElement | null;
 
             if (el) {
                 el.style.outline = `2px solid ${color}`;
                 el.style.backgroundColor = color;
-                setTimeout(() => {
-                    el.style.outline = '';
-                    el.style.backgroundColor = '';
-                }, 1000);
             }
         },
 
         clearHighlight(nodeId: number) {
-          const el = playerRef.current?.getMirror()?.getNode(nodeId) as HTMLElement | null;
-          if (el) {
-            el.style.outline = '';
-            el.style.backgroundColor = '';
-          }
+            const mirror = playerRef.current?.getMirror();
+            const el = mirror?.getNode(nodeId) as HTMLElement | null;
+
+            if (el) {
+                el.style.outline = '';
+                el.style.backgroundColor = '';
+            }
         },
 
         getMetaData: () => playerRef.current?.getMetaData(),
