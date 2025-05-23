@@ -1,8 +1,8 @@
 import { Box, Text } from '@chakra-ui/react';
-import type { TestRunUICoveragePageSnapshot } from '../types';
+import type { UICoveragePageSnapshot } from '../types';
 
 export interface SnapshotMetaInfoProps {
-  snapshot: TestRunUICoveragePageSnapshot;
+  snapshot: UICoveragePageSnapshot;
 }
 
 export default function SnapshotMetaInfo({ snapshot }: SnapshotMetaInfoProps) {
