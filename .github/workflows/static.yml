@@ -39,7 +39,7 @@ jobs:
           node-version: lts/*
           cache: 'npm'
       - name: Install dependencies
-        run: pnpm i
+        run: yarn install
       - name: Build
         run: npm run build
       - name: Upload artifact
