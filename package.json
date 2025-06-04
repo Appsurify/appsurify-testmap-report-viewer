@@ -1,7 +1,7 @@
 {
   "name": "ui-report-viewer",
   "private": true,
-  "version": "0.1.0",
+  "version": "2.1.2-alpha.1",
   "type": "module",
   "scripts": {
     "dev": "vite --port 5174",
@@ -10,10 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@appsurify-testmap/rrweb": "^2.1.1-alpha.5",
-    "@appsurify-testmap/rrweb-player": "^2.1.1-alpha.5",
-    "@appsurify-testmap/rrweb-snapshot": "^2.1.1-alpha.5",
-    "@appsurify-testmap/rrweb-types": "^2.1.1-alpha.5",
+    "@appsurify-testmap/rrweb": "^2.1.2-alpha.1",
+    "@appsurify-testmap/rrweb-player": "^2.1.2-alpha.1",
+    "@appsurify-testmap/rrweb-snapshot": "^2.1.2-alpha.1",
+    "@appsurify-testmap/rrweb-types": "^2.1.2-alpha.1",
     "@chakra-ui/icons": "^2.2.4",
     "@chakra-ui/react": "^2.3.4",
     "@emotion/react": "^11.14.0",
