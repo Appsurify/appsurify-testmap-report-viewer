@@ -9,7 +9,6 @@ import {
   StatGroup,
   useColorModeValue,
   Text,
-  HStack,
   Badge,
 } from '@chakra-ui/react';
 import { useReport } from '../context/ReportContext';
@@ -44,24 +43,45 @@ export default function SummaryHeader() {
         <Box>
           <Heading as="h2" size="md" mb={1}>
             Test Report
-          </Heading>
-          <Text fontSize="sm" color="gray.500" noOfLines={1}>
-            TestSuite: {''}
-          </Text>
-          <Text fontSize="sm" color="gray.500" noOfLines={1}>
-            TestCase: {''}
-          </Text>
-          <Text fontSize="sm" color="gray.500" noOfLines={1}>
-            Spec: {''}
-          </Text>
-          <HStack mt={1}>
-            <Badge colorScheme='green'>
-              passed
+            <Badge
+                colorScheme={report.test?.state === 'passed' ? 'green' : 'red'}
+            >
+              {report.test?.state}
             </Badge>
-            <Text fontSize="xs" color="gray.400">
-              Duration: 600 ms
-            </Text>
-          </HStack>
+          </Heading>
+          <Flex direction={{ base: 'column', md: 'row' }} justify="space-between" align="start" gap={4}>
+            <Box flex="1">
+              <Text fontSize="sm" color="gray.500" noOfLines={1}>
+                TestSuite: {report.suite?.title || ''}
+              </Text>
+              <Text fontSize="sm" color="gray.500" noOfLines={1}>
+                TestCase: {report.test?.title || ''}
+              </Text>
+              <Text fontSize="sm" color="gray.500" noOfLines={1}>
+                Spec: {report.spec?.name || ''}
+              </Text>
+              <Text fontSize="sm" color="gray.500" noOfLines={1}>
+                Duration: {report.test?.duration || 'unknown'} ms
+              </Text>
+
+            </Box>
+            <Box flexShrink={0}>
+              <Text fontSize="sm" color="gray.500" noOfLines={1}>
+                Runner: {report.runner?.source || 'unknown'}
+              </Text>
+              <Text fontSize="sm" color="gray.500" noOfLines={1}>
+                Type: {report.runner?.type || 'unknown'}
+              </Text>
+              <Text fontSize="sm" color="gray.500" noOfLines={1}>
+                Version: {report.runner?.version || 'unknown'}
+              </Text>
+              {report.runner?.recorder?.scriptVersion && (
+                <Text fontSize="sm" color="gray.500" noOfLines={1}>
+                  Recorder: {report.runner.recorder.scriptVersion}
+                </Text>
+              )}
+            </Box>
+          </Flex>
         </Box>
 
         <StatGroup>

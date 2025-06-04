@@ -3,10 +3,10 @@ import {
 } from '@chakra-ui/react';
 import { useSnapshot } from '../context/SnapshotContext';
 import type { RRWebPlayerRef } from './RRWebPlayer';
-import type {elementNode, serializedNodeWithId} from "@appsurify-testmap/rrweb-types";
-import type {EnrichedNode, UICoverageAction} from "../types";
-import {useSelection} from "../context/SelectionContext.tsx";
-import {ExternalLinkIcon} from "@chakra-ui/icons";
+import type {elementNode, serializedNodeWithId} from '@appsurify-testmap/rrweb-types';
+import type { UICoverageAction, EnrichedNode } from '../report/types';
+import {useSelection} from '../context/SelectionContext.tsx';
+import {ExternalLinkIcon} from '@chakra-ui/icons';
 
 
 
@@ -39,7 +39,7 @@ export default function ElementList({ playerRef }: Props) {
 
   const nodeActionMap = new Map<number, UICoverageAction[]>();
   for (const action of actions) {
-    const nodeId = action.nodeMeta?.id;
+    const nodeId = action.node?.id;
     if (nodeId !== undefined) {
       if (!nodeActionMap.has(nodeId)) {
         nodeActionMap.set(nodeId, []);

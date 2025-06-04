@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
-import type { UICoverageReport } from '../types';
+import type { UICoverageReport } from '../report/types';
 
 
 interface ReportContextType {

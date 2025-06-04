@@ -8,7 +8,7 @@ import {
   StepDescription, StepIndicator, StepStatus, StepIcon
 } from '@chakra-ui/react';
 
-import type { UICoverageAction } from '../types';
+import type { UICoverageAction } from '../report/types';
 import {useSelection} from "../context/SelectionContext.tsx";
 
 export interface ActionListProps {

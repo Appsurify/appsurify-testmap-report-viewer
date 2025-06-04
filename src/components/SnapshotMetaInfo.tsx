@@ -1,5 +1,5 @@
 import { Box, Text } from '@chakra-ui/react';
-import type { UICoveragePageSnapshot } from '../types';
+import type { UICoveragePageSnapshot } from '../report/types';
 
 export interface SnapshotMetaInfoProps {
   snapshot: UICoveragePageSnapshot;

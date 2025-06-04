@@ -10,7 +10,8 @@ import {
 import { FiUpload } from 'react-icons/fi';
 import { useDropzone } from 'react-dropzone';
 import { useReport } from '../context/ReportContext';
-import type { UICoverageReport } from '../types';
+import type { UICoverageReport } from '../report/types';
+import {loadFromResult} from '../report';
 
 export default function UploadArea() {
   const { setReport } = useReport();
@@ -23,10 +24,11 @@ export default function UploadArea() {
     reader.onload = (event) => {
       try {
         const json = JSON.parse(event.target?.result as string);
-        if (!Array.isArray(json.pages)) {
+        const report = loadFromResult(json);
+        if (!Array.isArray(report.pages)) {
           throw new Error('Invalid report structure.');
         }
-        setReport(json as UICoverageReport);
+        setReport(report as UICoverageReport);
         toast({
           title: 'Report loaded',
           description: file.name,

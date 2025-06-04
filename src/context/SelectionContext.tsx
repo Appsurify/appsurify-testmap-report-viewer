@@ -1,5 +1,5 @@
 import {createContext, useContext, useState, type ReactNode, useCallback} from 'react';
-import type {UICoverageAction} from '../types';
+import type {UICoverageAction} from '../report/types';
 
 type SelectionState = {
   selectedElement: unknown | null;

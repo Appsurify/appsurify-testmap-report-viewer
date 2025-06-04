@@ -2,9 +2,9 @@ import {
     Container,
     VStack,
 } from '@chakra-ui/react';
-import {useReport} from "./context/ReportContext.tsx";
-import UploadArea from "./components/UploadArea.tsx";
-import ReportViewerLayout from "./layouts/ReportViewerLayout.tsx";
+import {useReport} from './context/ReportContext.tsx';
+import UploadArea from './components/UploadArea.tsx';
+import ReportViewerLayout from './layouts/ReportViewerLayout.tsx';
 
 
 function App() {

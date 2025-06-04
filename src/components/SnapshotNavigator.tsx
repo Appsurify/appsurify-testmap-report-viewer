@@ -1,8 +1,7 @@
 import { HStack, Button, Text, Icon } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useSnapshot } from '../context/SnapshotContext';
-import {useEffect} from "react";
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 
 export default function SnapshotNavigator() {
     const { snapshot, setSnapshot, snapshots } = useSnapshot();

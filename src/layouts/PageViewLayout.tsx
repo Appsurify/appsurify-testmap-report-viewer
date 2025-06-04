@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { usePage } from '../context/PageContext';
 import { useSnapshot } from '../context/SnapshotContext';
 import PageList from '../components/PageList';
-import SnapshotViewLayout from "./SnapshotViewLayout.tsx";
+import SnapshotViewLayout from './SnapshotViewLayout.tsx';
 
 export default function PageViewLayout() {
   const { page, pages, setPage } = usePage();

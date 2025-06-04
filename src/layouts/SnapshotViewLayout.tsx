@@ -8,12 +8,12 @@ import {
 import {useEffect, useRef} from 'react';
 import { useSnapshot } from '../context/SnapshotContext';
 import SnapshotNavigator from '../components/SnapshotNavigator';
-import RRWebPlayer, {type RRWebPlayerRef} from "../components/RRWebPlayer.tsx";
-import SnapshotMetaInfo from "../components/SnapshotMetaInfo.tsx";
-import ElementList from "../components/ElementList.tsx";
-import ActionList from "../components/ActionList.tsx";
-import {useSelection} from "../context/SelectionContext.tsx";
-import type {UICoverageAction} from "../types";
+import RRWebPlayer, {type RRWebPlayerRef} from '../components/RRWebPlayer.tsx';
+import SnapshotMetaInfo from '../components/SnapshotMetaInfo.tsx';
+import ElementList from '../components/ElementList.tsx';
+import ActionList from '../components/ActionList.tsx';
+import {useSelection} from '../context/SelectionContext.tsx';
+import type {UICoverageAction} from '../report/types.ts';
 
 export default function SnapshotViewLayout() {
   const { snapshot, setSnapshot, snapshots } = useSnapshot();

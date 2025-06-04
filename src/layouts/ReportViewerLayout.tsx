@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useReport } from '../context/ReportContext';
 import { usePage } from "../context/PageContext.tsx";
 import PageViewLayout from './PageViewLayout';
-import SummaryHeader from "../components/SummaryHeader.tsx";
+import SummaryHeader from '../components/SummaryHeader.tsx';
 
 export default function ReportViewerLayout() {
   const { report } = useReport();

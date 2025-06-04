@@ -1,5 +1,5 @@
 import {createContext, useContext, useState, type ReactNode, useEffect} from 'react';
-import type { UICoveragePageSnapshot } from '../types';
+import type { UICoveragePageSnapshot } from '../report/types';
 
 interface SnapshotContextType {
   snapshot: UICoveragePageSnapshot | null;

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
-import type { UICoveragePage } from '../types';
+import type { UICoveragePage } from '../report/types';
 
 interface PageContextType {
   page: UICoveragePage | null;
