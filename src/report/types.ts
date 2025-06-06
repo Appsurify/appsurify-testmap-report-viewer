@@ -99,8 +99,8 @@ export interface BrowserMetadata {
     path?: string;
 }
 
-export interface UICoverageAction {
-  id?: number | string;
+export type UICoverageAction = {
+  id: number | string;
   timestamp: number;
 
   // источник события
@@ -116,7 +116,7 @@ export interface UICoverageAction {
           'hover'; // <- mousemove/touchmove
 
   // мета-информация об элементе
-  node?: serializedNodeWithId;
+  elementId?: number | string;
 
   // конкретное значение действия
   value?: string | number | boolean;
@@ -125,26 +125,33 @@ export interface UICoverageAction {
   position?: { x: number; y: number };
 }
 
+export type UICoverageElement = serializedNodeWithId & {
+    isInteracted: boolean;
+}
+
+export type CoverageInfo = {
+    total: number;
+    visible: number;
+    interactive: number;
+    interacted: number;
+    ratio: number;
+    percentage: number;
+}
+
 export interface UICoveragePageSnapshot {
     id: string;
     events: eventWithTime[];
-    totalElements: serializedNodeWithId[];  // Visible interactive nodes
-    interactedElements: serializedNodeWithId[]; // Only interacted from (events) nodes
+    elements: UICoverageElement[];  // Visible interactive nodes
     actions: UICoverageAction[];
-    totalElementCount: number;
-    interactedElementCount: number;
-    coverageRatio: number;      // e.g. 0.67
-    coveragePercent: number;    // e.g. 67.1
+    coverageInfo: CoverageInfo;
+
 }
 
 export interface UICoveragePage {
     id: string;
     href: string;
     snapshots: UICoveragePageSnapshot[];
-    totalElementCount: number;
-    interactedElementCount: number;
-    coverageRatio: number;      // e.g. 0.67
-    coveragePercent: number;    // e.g. 67.1
+    coverageInfo: CoverageInfo;
 }
 
 export interface UICoverageReport {
@@ -154,12 +161,6 @@ export interface UICoverageReport {
     suite?: Partial<SuiteMetadata>;
     browser?: Partial<BrowserMetadata>;
     pages: UICoveragePage[];
-}
-
-export interface EnrichedNode {
-  node: serializedNodeWithId;
-  actions: UICoverageAction[];
-  isInteracted: boolean;
 }
 
 export type NodeLookup = Map<number, serializedNodeWithId>;

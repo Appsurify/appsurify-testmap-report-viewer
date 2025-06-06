@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 
 import type { UICoverageAction } from '../report/types';
-import {useSelection} from "../context/SelectionContext.tsx";
+import {useSelection} from '../context/SelectionContext.tsx';
 
 export interface ActionListProps {
   actions: UICoverageAction[];

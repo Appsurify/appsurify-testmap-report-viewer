@@ -24,7 +24,7 @@ export default function SummaryHeader() {
   const pages = report.pages ?? [];
   const totalPages = pages.length;
 
-  const coverageValues = pages.map((p) => p.coveragePercent ?? 0);
+  const coverageValues = pages.map((p) => p.coverageInfo.percentage ?? 0);
   const totalCoverage = coverageValues.reduce((sum, val) => sum + val, 0);
   const avgCoverage = totalPages > 0 ? (totalCoverage / totalPages).toFixed(1) : '0';
   const minCoverage = coverageValues.length > 0 ? Math.min(...coverageValues).toFixed(1) : '0';

@@ -1,13 +1,18 @@
 import type {
   elementNode,
-  eventWithTime, fullSnapshotEvent,
-  incrementalData, metaEvent,
+  eventWithTime,
+  fullSnapshotEvent,
+  incrementalData,
+  metaEvent,
   NodeLookup,
+  RawReport,
   serializedNodeWithId,
   UICoverageAction,
+  UICoverageElement,
   UICoveragePage,
   UICoveragePageSnapshot,
-  visibilityMutationData
+  visibilityMutationData,
+  UICoverageReport
 } from './types';
 
 import {
@@ -22,8 +27,8 @@ export function hasNodeId(data: incrementalData): data is incrementalData & { id
   return typeof data === 'object' && data !== null && 'id' in data && typeof (data as { id: unknown }).id === 'number';
 }
 
-export function collectNodes(node: serializedNodeWithId): serializedNodeWithId[] {
-  const flat: serializedNodeWithId[] = [];
+export function collectNodes(node: serializedNodeWithId): UICoverageElement[] {
+  const flat: UICoverageElement[] = [];
 
   function walk(n: serializedNodeWithId) {
     if (n?.type === NodeType.Element) {
@@ -35,7 +40,8 @@ export function collectNodes(node: serializedNodeWithId): serializedNodeWithId[]
         isInteractive: n.isInteractive ?? false,
         selector: n.selector ?? undefined,
         attributes: n.attributes ?? {},
-      } as serializedNodeWithId);
+        isInteracted: false
+      } as UICoverageElement);
     }
     for (const child of (n as elementNode).childNodes ?? []) {
       walk(child);
@@ -54,7 +60,8 @@ export function collectActions(
 
   for (const e of events) {
     if (e.type !== EventType.IncrementalSnapshot) continue;
-    const eventId = (e as {id?: number | string } & eventWithTime)?.id;
+
+    const eventId = (e as {id?: number | string } & eventWithTime)?.id || `action-${logs.length+1}`;
     const data: incrementalData = e.data;
 
     // Hover events (MouseMove, TouchMove)
@@ -72,7 +79,7 @@ export function collectActions(
           timestamp: e.timestamp + pos.timeOffset,
           source: data.source,
           action: 'hover',
-          node: node,
+          elementId: node.id,
           position: { x: pos.x, y: pos.y },
         });
       }
@@ -170,7 +177,7 @@ export function collectActions(
         timestamp: e.timestamp,
         source: data.source,
         action: action,
-        node: node,
+        elementId: node.id,
         value: value,
         position: position
       });
@@ -207,12 +214,14 @@ export function createSnapshot(events: eventWithTime[], snapshotIndex: number): 
     ) {
       for (const addMutation of event.data.adds) {
         if (addMutation.node.type === NodeType.Element) {
-          elements.push(addMutation.node);
+          elements.push({
+            ...addMutation.node,
+            isInteracted: false
+          });
         }
       }
     }
   }
-
 
   for (const node of elements) {
     const overrideVisibility = visibilityMap.get(node.id);
@@ -220,9 +229,6 @@ export function createSnapshot(events: eventWithTime[], snapshotIndex: number): 
       node.isVisible = overrideVisibility;
     }
   }
-
-  const visibleElements = elements.filter(n => n?.isVisible);
-  const visibleInteractiveElements = visibleElements.filter(n => n?.isInteractive);
 
   const nodeMap = new Map<number, serializedNodeWithId>();
   for (const el of elements) {
@@ -233,40 +239,35 @@ export function createSnapshot(events: eventWithTime[], snapshotIndex: number): 
 
   const actions = collectActions(events, nodeMap);
 
-  const actionMap = new Map<serializedNodeWithId, UICoverageAction[]>();
+  const elementActions = new Map<number | string, UICoverageAction>();
   for (const action of actions) {
-    const nodeMeta = action.node;
-
-    if (!nodeMeta) continue;
-
-    if (!actionMap.has(nodeMeta)) actionMap.set(nodeMeta, []);
-
-    actionMap.get(nodeMeta)?.push({
-      ...action,
-      node: undefined,
-    });
+    if (action.elementId) {
+      elementActions.set(action.elementId, action);
+    }
   }
 
-  const interactedElements: UICoveragePageSnapshot['interactedElements'] = [];
-
-  actionMap.forEach((_actions, nodeMeta) => {
-    interactedElements.push(nodeMeta);
+  elements.map((element) => {
+    element.isInteracted = elementActions.get(element.id) !== undefined;
   })
+  const visibleElements = elements.filter(n => n?.isVisible);
+  const visibleInteractiveElements = visibleElements.filter(n => n?.isInteractive);
+  const interactedElements = visibleInteractiveElements.filter(n => n.isInteracted);
 
-  const totalCount = visibleInteractiveElements.length;
-  const interactedCount = interactedElements.length;
-  const ratio = totalCount > 0 ? interactedCount / totalCount : 0;
+  const ratio = visibleInteractiveElements.length > 0 ? interactedElements.length / visibleInteractiveElements.length : 0;
   const percent = Math.round(ratio * 10000) / 100;
   return {
-    id,
-    events,
+    id: id,
+    events: events,
+    elements: visibleInteractiveElements,
     actions: actions,
-    totalElements: visibleInteractiveElements,
-    interactedElements: interactedElements,
-    totalElementCount: totalCount,
-    interactedElementCount: interactedCount,
-    coverageRatio: ratio,
-    coveragePercent: percent,
+    coverageInfo: {
+      total: elements.length,
+      visible: visibleElements.length,
+      interactive: visibleInteractiveElements.length,
+      interacted: interactedElements.length,
+      ratio: ratio,
+      percentage: percent
+    }
   };
 }
 
@@ -296,10 +297,14 @@ export function createPages(events: eventWithTime[]): UICoveragePage[] {
         id: `page-${pageMap.size}`,
         href,
         snapshots: [],
-        totalElementCount: 0,
-        interactedElementCount: 0,
-        coverageRatio: 0,
-        coveragePercent: 0
+        coverageInfo: {
+          total: 0,
+          visible: 0,
+          interactive: 0,
+          interacted: 0,
+          ratio: 0,
+          percentage: 0,
+        }
       });
     }
 
@@ -326,24 +331,54 @@ export function createPages(events: eventWithTime[]): UICoveragePage[] {
       page.snapshots.push(createSnapshot((snapshotEvents as eventWithTime[]), snapshotIndex++));
     }
 
-    const allVisible = new Map<number, serializedNodeWithId>();
-    const allInteracted = new Map<number, serializedNodeWithId>();
+    const allElements = new Map<number, UICoverageElement>();
+    const allVisibleElements = new Map<number, UICoverageElement>();
+    const allVisibleInteractiveElements = new Map<number, UICoverageElement>();
+    const allInteracted = new Map<number, UICoverageElement>();
 
     for (const snap of page.snapshots) {
-      for (const el of snap.totalElements) {
-        allVisible.set(el.id, el);
+      for (const el of snap.elements) {
+        allElements.set(el.id, el);
       }
-      for (const el of snap.interactedElements) {
+      for (const el of snap.elements.filter(n => n.isVisible)) {
+        allVisibleElements.set(el.id, el);
+      }
+      for (const el of snap.elements.filter(n => n.isVisible && n.isInteractive)) {
+        allVisibleInteractiveElements.set(el.id, el);
+      }
+      for (const el of snap.elements.filter(n => n.isInteracted)) {
         allInteracted.set(el.id, el);
       }
     }
-    page.totalElementCount = allVisible.size;
-    page.interactedElementCount = allInteracted.size;
-    page.coverageRatio = allVisible.size > 0 ? allInteracted.size / allVisible.size : 0;
-    page.coveragePercent = Math.round(page.coverageRatio * 10000) / 100;
+    page.coverageInfo.total = allElements.size;
+    page.coverageInfo.visible = allVisibleElements.size;
+    page.coverageInfo.interactive = allVisibleInteractiveElements.size;
+    page.coverageInfo.interacted = allInteracted.size;
+    page.coverageInfo.ratio = allVisibleInteractiveElements.size > 0 ? allInteracted.size / allVisibleInteractiveElements.size : 0;
+    page.coverageInfo.percentage = Math.round(page.coverageInfo.ratio * 10000) / 100;
 
   }
 
   return Array.from(pageMap.values());
 }
 
+export function transformRawToUICoverage(raw: RawReport): UICoverageReport {
+  const { metadata = {}, events } = raw;
+  const {
+    runner = {},
+    spec = {},
+    test = {},
+    suite = {},
+    browser = {}
+  } = metadata;
+  const pages = createPages(events);
+
+  return {
+    runner,
+    spec,
+    test,
+    suite,
+    browser,
+    pages
+  }
+}

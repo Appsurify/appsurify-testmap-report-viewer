@@ -3,8 +3,8 @@ import {
 } from '@chakra-ui/react';
 import { useSnapshot } from '../context/SnapshotContext';
 import type { RRWebPlayerRef } from './RRWebPlayer';
-import type {elementNode, serializedNodeWithId} from '@appsurify-testmap/rrweb-types';
-import type { UICoverageAction, EnrichedNode } from '../report/types';
+import type {elementNode} from '@appsurify-testmap/rrweb-types';
+
 import {useSelection} from '../context/SelectionContext.tsx';
 import {ExternalLinkIcon} from '@chakra-ui/icons';
 
@@ -20,52 +20,8 @@ export default function ElementList({ playerRef }: Props) {
 
   const { updateSelection } = useSelection();
 
-  const totalElements = snapshot?.totalElements ?? [];
-  const interactedElements = snapshot?.interactedElements ?? [];
-  const actions = snapshot?.actions ?? [];
-  const interactedMap = new Map<number, serializedNodeWithId>(
-    interactedElements.map((el) => [el.id, el])
-  );
+  // const actions = snapshot?.actions ?? [];
 
-  const totalMap = new Map<number, serializedNodeWithId>(
-    totalElements.map((el) => [el.id, el])
-  );
-
-  // Получаем список уникальных node.id из объединённого множества
-  const allNodeIds = new Set<number>([
-    ...totalElements.map((el) => el.id),
-    ...interactedElements.map((el) => el.id),
-  ]);
-
-  const nodeActionMap = new Map<number, UICoverageAction[]>();
-  for (const action of actions) {
-    const nodeId = action.node?.id;
-    if (nodeId !== undefined) {
-      if (!nodeActionMap.has(nodeId)) {
-        nodeActionMap.set(nodeId, []);
-      }
-      nodeActionMap.get(nodeId)!.push(action);
-    }
-  }
-
-  const enrichedElements: EnrichedNode[] = Array.from(allNodeIds).map((id) => {
-    const node =
-      interactedMap.get(id) ?? totalMap.get(id);
-
-    return {
-      node: node!,
-      actions: nodeActionMap.get(id) ?? [],
-      isInteracted: interactedMap.has(id),
-    };
-  })
-  .sort((a, b) => {
-    // Сначала по isInteracted (true > false)
-    if (a.isInteracted !== b.isInteracted) {
-      return a.isInteracted ? -1 : 1;
-    }
-    // Затем по количеству actions (desc)
-    return b.actions.length - a.actions.length;
-  });
 
   if (!snapshot) {
     return <Text color="gray.500">Elements not found</Text>;
@@ -77,11 +33,11 @@ export default function ElementList({ playerRef }: Props) {
         <Box>
 
           <List spacing={2}>
-            {enrichedElements.map((element) => {
+            {snapshot.elements.filter(e => e.isVisible && e.isInteractive).map((element) => {
 
               return (
                 <ListItem
-                  key={element.node.id}
+                  key={element.id}
                   onClick={() => {
                     updateSelection({ selectedElement: element });
                   }}
@@ -100,16 +56,16 @@ export default function ElementList({ playerRef }: Props) {
                         disabled={!element.isInteracted}
                         mr={2}
                     />
-                    {(element.node as elementNode).tagName}
+                    {(element as elementNode).tagName}
                   </Text>
-                  {element.node.selector && (
+                  {element.selector && (
                       <Text fontSize="xs" color="gray.500" noOfLines={1}>
-                        selector: {element.node.selector}
+                        selector: {element.selector}
                       </Text>
                   )}
-                  {element.node.xpath && (
+                  {element.xpath && (
                     <Text fontSize="xs" color="gray.500" noOfLines={1}>
-                      xpath: {element.node.xpath}
+                      xpath: {element.xpath}
                     </Text>
                   )}
 

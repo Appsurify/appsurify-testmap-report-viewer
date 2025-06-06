@@ -53,7 +53,7 @@ export default function SnapshotViewLayout() {
         <Box width="260px" flexShrink={0} overflowY="auto" pr={2}>
 
           <Text fontSize="sm" fontWeight="semibold" mb={2}>
-            DOM Elements <Badge colorScheme="green">{snapshot.interactedElementCount} / {snapshot.totalElementCount}</Badge>
+            DOM Elements <Badge colorScheme="green">{snapshot.coverageInfo.interacted} / {snapshot.coverageInfo.interactive}</Badge>
           </Text>
 
           <ElementList playerRef={playerRef} />

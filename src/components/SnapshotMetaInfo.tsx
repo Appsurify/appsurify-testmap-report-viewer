@@ -6,9 +6,8 @@ export interface SnapshotMetaInfoProps {
 }
 
 export default function SnapshotMetaInfo({ snapshot }: SnapshotMetaInfoProps) {
-  const { events, totalElementCount, interactedElementCount, coveragePercent } = snapshot;
+  const { events } = snapshot;
 
-  const testedCount = interactedElementCount;
   // @ts-ignore
   const firstMeta = events.find((e) => e.type === 4);
   // const eventName =
@@ -27,7 +26,7 @@ export default function SnapshotMetaInfo({ snapshot }: SnapshotMetaInfoProps) {
       <Text fontSize="xs" color="gray.500">
 
         Resolution: {width}×{height} •{' '}
-        {testedCount} / {totalElementCount} interactive ({coveragePercent}%)
+        {snapshot.coverageInfo.interacted} / {snapshot.coverageInfo.interactive} interactive ({snapshot.coverageInfo.percentage}%)
       </Text>
     </Box>
   );
