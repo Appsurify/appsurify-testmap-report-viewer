@@ -44,6 +44,7 @@ export default function SummaryHeader() {
           <Heading as="h2" size="md" mb={1}>
             Test Report
             <Badge
+                ml={2}
                 colorScheme={report.test?.state === 'passed' ? 'green' : 'red'}
             >
               {report.test?.state}
@@ -65,7 +66,11 @@ export default function SummaryHeader() {
               </Text>
 
             </Box>
+
             <Box flexShrink={0}>
+              <Text fontSize="sm" color="gray.500" noOfLines={1}>
+                Browser: {report.browser?.displayName || 'unknown'} {report.browser?.version || 'unknown'}
+              </Text>
               <Text fontSize="sm" color="gray.500" noOfLines={1}>
                 Runner: {report.runner?.source || 'unknown'}
               </Text>
