@@ -11,7 +11,7 @@ import type {
   UICoverageElement,
   UICoveragePage,
   UICoveragePageSnapshot,
-  visibilityMutationData,
+  // visibilityMutationData,
   UICoverageReport
 } from './types';
 
@@ -193,18 +193,18 @@ export function createSnapshot(events: eventWithTime[], snapshotIndex: number): 
   const fullSnapshot = events.find(e => e.type === EventType.FullSnapshot);
   const fullDom = (fullSnapshot as fullSnapshotEvent)?.data.node;
 
-  const visibilityMap = new Map<number, boolean>();
-  for (const event of events) {
-    if (
-      event.type === EventType.IncrementalSnapshot &&
-      event.data.source === IncrementalSource.VisibilityMutation
-    ) {
-      const mutations = (event.data as unknown as visibilityMutationData).mutations;
-      for (const { id, isVisible } of mutations) {
-        visibilityMap.set(id, isVisible);
-      }
-    }
-  }
+  // const visibilityMap = new Map<number, boolean>();
+  // for (const event of events) {
+  //   if (
+  //     event.type === EventType.IncrementalSnapshot &&
+  //     event.data.source === IncrementalSource.VisibilityMutation
+  //   ) {
+  //     const mutations = (event.data as unknown as visibilityMutationData).mutations;
+  //     for (const { id, isVisible } of mutations) {
+  //       visibilityMap.set(id, isVisible);
+  //     }
+  //   }
+  // }
 
   const elements = fullDom ? collectNodes(fullDom) : [];
   for (const event of events) {
@@ -223,12 +223,12 @@ export function createSnapshot(events: eventWithTime[], snapshotIndex: number): 
     }
   }
 
-  for (const node of elements) {
-    const overrideVisibility = visibilityMap.get(node.id);
-    if (overrideVisibility !== undefined) {
-      node.isVisible = overrideVisibility;
-    }
-  }
+  // for (const node of elements) {
+  //   const overrideVisibility = visibilityMap.get(node.id);
+  //   if (overrideVisibility !== undefined) {
+  //     node.isVisible = overrideVisibility;
+  //   }
+  // }
 
   const nodeMap = new Map<number, serializedNodeWithId>();
   for (const el of elements) {
@@ -253,12 +253,19 @@ export function createSnapshot(events: eventWithTime[], snapshotIndex: number): 
   const visibleInteractiveElements = visibleElements.filter(n => n?.isInteractive);
   const interactedElements = visibleInteractiveElements.filter(n => n.isInteracted);
 
+  // Sort visible interactive elements with interacted elements first
+  const sortedVisibleInteractiveElements = visibleInteractiveElements.sort((a, b) => {
+    if (a.isInteracted && !b.isInteracted) return -1;
+    if (!a.isInteracted && b.isInteracted) return 1;
+    return 0;
+  });
+
   const ratio = visibleInteractiveElements.length > 0 ? interactedElements.length / visibleInteractiveElements.length : 0;
   const percent = Math.round(ratio * 10000) / 100;
   return {
     id: id,
     events: events,
-    elements: visibleInteractiveElements,
+    elements: sortedVisibleInteractiveElements,
     actions: actions,
     coverageInfo: {
       total: elements.length,

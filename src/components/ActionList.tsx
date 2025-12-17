@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Box,
   Text,
@@ -17,9 +18,24 @@ export interface ActionListProps {
 }
 
 export default function ActionList({ actions, onSelect }: ActionListProps) {
-
   const { selection, updateSelection } = useSelection();
   const activeIndex = actions.findIndex((e) => e.id === selection.selectedAction?.id);
+
+  const stepperRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (activeIndex !== -1 && stepperRef.current) {
+      const steps = stepperRef.current.querySelectorAll('[data-index]');
+      const targetStep = steps[activeIndex] as HTMLElement;
+
+      if (targetStep) {
+        targetStep.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    }
+  }, [activeIndex]);
 
   if (!actions.length) {
     return <Text color="gray.500">Test events not found</Text>;
@@ -27,16 +43,21 @@ export default function ActionList({ actions, onSelect }: ActionListProps) {
 
   return (
     <Box>
-      <Stepper orientation="vertical" index={activeIndex}>
+      <Stepper
+        ref={stepperRef}
+        orientation="vertical"
+        index={activeIndex}
+      >
         {actions.map((action, index) => (
           <Step
+              data-index={index}
               key={index}
               onClick={() => {
-
                 updateSelection({
                   selectedAction: action,
                   // @ts-ignore
-                  selectedElement: action.nodeMeta?.id !== selection.selectedElement?.id ? null : selection.selectedElement });
+                  selectedElement: action.nodeMeta?.id !== selection.selectedElement?.id ? null : selection.selectedElement
+                });
                 onSelect?.(action);
               }}
               cursor="pointer"
@@ -44,7 +65,6 @@ export default function ActionList({ actions, onSelect }: ActionListProps) {
             <StepIndicator>
               <StepStatus
                 complete={<StepIcon />}
-
               />
             </StepIndicator>
 
@@ -54,11 +74,8 @@ export default function ActionList({ actions, onSelect }: ActionListProps) {
             </Box>
 
             <StepSeparator />
-
           </Step>
-
         ))}
-
       </Stepper>
     </Box>
   );

@@ -10,10 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@appsurify-testmap/rrweb": "^2.1.2-alpha.1",
-    "@appsurify-testmap/rrweb-player": "^2.1.2-alpha.1",
-    "@appsurify-testmap/rrweb-snapshot": "^2.1.2-alpha.1",
-    "@appsurify-testmap/rrweb-types": "^2.1.2-alpha.1",
+    "@appsurify-testmap/rrweb": "/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/rrweb",
+    "@appsurify-testmap/rrweb-player": "/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/rrweb-player",
+    "@appsurify-testmap/rrweb-snapshot": "/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/rrweb-snapshot",
+    "@appsurify-testmap/rrweb-types": "/Users/whenessel/Development/WebstormProjects/appsurify-rrweb/packages/types",
     "@chakra-ui/icons": "^2.2.4",
     "@chakra-ui/react": "^2.3.4",
     "@emotion/react": "^11.14.0",

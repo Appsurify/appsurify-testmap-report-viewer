@@ -10,64 +10,68 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
-"@appsurify-testmap/rrdom@^2.1.2-alpha.1":
-  version "2.1.2-alpha.1"
-  resolved "https://registry.npmjs.org/@appsurify-testmap/rrdom/-/rrdom-2.1.2-alpha.1.tgz"
-  integrity sha512-mQAX7JatpHz5oO/PsFZDVE3XcB8dSP3qWv06LtraOwcoIi/QONWPY+9oklIx1f1rCUJSHTxxbxmn7IMTvh8O2Q==
+"@appsurify-testmap/rrdom@^2.1.3-alpha.2":
+  version "2.1.3-alpha.2"
+  resolved "https://registry.yarnpkg.com/@appsurify-testmap/rrdom/-/rrdom-2.1.3-alpha.2.tgz#1ea9e47ed9a4da2902265e57ec5b5dd1d6729791"
+  integrity sha512-OXVA6IGT5H5PL7eTOILPtWd4ucaHTDrWSC1vkwzFtWmHT7ZSr8TcucPJkALHkcGDj9ofZllDqQe0wWYouW0mJg==
   dependencies:
-    "@appsurify-testmap/rrweb-snapshot" "^2.1.2-alpha.1"
+    "@appsurify-testmap/rrweb-snapshot" "^2.1.3-alpha.2"
 
-"@appsurify-testmap/rrweb-packer@^2.1.2-alpha.1":
-  version "2.1.2-alpha.1"
-  resolved "https://registry.npmjs.org/@appsurify-testmap/rrweb-packer/-/rrweb-packer-2.1.2-alpha.1.tgz"
-  integrity sha512-8murM7Wwrsr/R7dJuHRVcYiGNXzWvxoBwQuiLqWnqJ5Tdexfb6YqXYcskDz6P60PAqDiZrThiOiA7w6oEx73sA==
+"@appsurify-testmap/rrweb-packer@^2.1.3-alpha.2":
+  version "2.1.3-alpha.2"
+  resolved "https://registry.yarnpkg.com/@appsurify-testmap/rrweb-packer/-/rrweb-packer-2.1.3-alpha.2.tgz#1f4e1e7553565f24dfbd440a168a042682ad7791"
+  integrity sha512-OanJ3tppIC30Ev1pjYPoq6aCCTKCzT05diXCXa0LfdQk4EE8zOK/IekynSfhtmN3nfbAgr/CqIBnRcsLJDcEUQ==
   dependencies:
-    "@appsurify-testmap/rrweb-types" "^2.1.2-alpha.1"
+    "@appsurify-testmap/rrweb-types" "^2.1.3-alpha.2"
     fflate "^0.4.4"
 
-"@appsurify-testmap/rrweb-player@^2.1.2-alpha.1":
-  version "2.1.2-alpha.1"
-  resolved "https://registry.npmjs.org/@appsurify-testmap/rrweb-player/-/rrweb-player-2.1.2-alpha.1.tgz"
-  integrity sha512-dVyX8TMZHXpxsvq4k6W3ma8A8r5O6mIReMC/snovrnU3ffEal1idAz8/v9JL4HhV2ZqFe1ivnKXSeI6aHt5soQ==
+"@appsurify-testmap/rrweb-player@file:../appsurify-rrweb/packages/rrweb-player":
+  version "2.1.3-alpha.2"
   dependencies:
-    "@appsurify-testmap/rrweb-packer" "^2.1.2-alpha.1"
-    "@appsurify-testmap/rrweb-replay" "^2.1.2-alpha.1"
+    "@appsurify-testmap/rrweb-packer" "^2.1.3-alpha.2"
+    "@appsurify-testmap/rrweb-replay" "^2.1.3-alpha.2"
     "@tsconfig/svelte" "^1.0.0"
 
-"@appsurify-testmap/rrweb-replay@^2.1.2-alpha.1":
-  version "2.1.2-alpha.1"
-  resolved "https://registry.npmjs.org/@appsurify-testmap/rrweb-replay/-/rrweb-replay-2.1.2-alpha.1.tgz"
-  integrity sha512-hDXDig2YwfTDghDCZeHV7uq0gtMdWBy3nf7diN6M60MYoESdPLZhSh9oeZS9fXfc8Uc3VVizqCbex0u+MSObHQ==
+"@appsurify-testmap/rrweb-replay@^2.1.3-alpha.2":
+  version "2.1.3-alpha.2"
+  resolved "https://registry.yarnpkg.com/@appsurify-testmap/rrweb-replay/-/rrweb-replay-2.1.3-alpha.2.tgz#6d1a7a29e1a107dc553f15c745ced8dae39ab2e0"
+  integrity sha512-R0YTZCV6inNPeynZisL1cr4HZyCZ2qHu+nQ8WRMyK2rfrDkLCTpII2IQ3i34PpWYoHvtPCjVFu/dUX6mr0CA/g==
   dependencies:
-    "@appsurify-testmap/rrweb" "^2.1.2-alpha.1"
-    "@appsurify-testmap/rrweb-types" "^2.1.2-alpha.1"
+    "@appsurify-testmap/rrweb" "^2.1.3-alpha.2"
+    "@appsurify-testmap/rrweb-types" "^2.1.3-alpha.2"
 
-"@appsurify-testmap/rrweb-snapshot@^2.1.2-alpha.1":
-  version "2.1.2-alpha.1"
-  resolved "https://registry.npmjs.org/@appsurify-testmap/rrweb-snapshot/-/rrweb-snapshot-2.1.2-alpha.1.tgz"
-  integrity sha512-S9OZHPaxmJ9PLIxi7d4BjKZ7f7xIfynoUqdIesvNlJj29gitS3x0noFy22nBG1JSntDgmpvPSGKk7tT+CU6gDQ==
+"@appsurify-testmap/rrweb-snapshot@^2.1.3-alpha.2":
+  version "2.1.3-alpha.2"
+  resolved "https://registry.yarnpkg.com/@appsurify-testmap/rrweb-snapshot/-/rrweb-snapshot-2.1.3-alpha.2.tgz#ee4899610d85b096938944c4ce03008498afec02"
+  integrity sha512-xYq2EC1FDG2nYvIqgua1eoTx0il6GpTjIvYh15HqA7CzMqxCrnFlLkm5v6Sfj+WEcKlGCR9sq0p5+NjkVPmSWA==
   dependencies:
     postcss "^8.4.38"
 
-"@appsurify-testmap/rrweb-types@^2.1.2-alpha.1":
-  version "2.1.2-alpha.1"
-  resolved "https://registry.npmjs.org/@appsurify-testmap/rrweb-types/-/rrweb-types-2.1.2-alpha.1.tgz"
-  integrity sha512-D8LdiFi9tZTc/KTgObqE6Pqp59FTdpd7nhF0SzbX3Relj8M/1Ha+UUgdVO2VZLRk6dGtF4zOUoGj0hUAVKzXag==
-
-"@appsurify-testmap/rrweb-utils@^2.1.2-alpha.1":
-  version "2.1.2-alpha.1"
-  resolved "https://registry.npmjs.org/@appsurify-testmap/rrweb-utils/-/rrweb-utils-2.1.2-alpha.1.tgz"
-  integrity sha512-7ycIkXcEh7F6bAg2TKcOkvpvRa/qFl6Vcxl70ZGmy/fdrI71IhQXMXPKT36BrLz6ZKYZLJ9kr1Au0uhhfFGblw==
-
-"@appsurify-testmap/rrweb@^2.1.2-alpha.1":
-  version "2.1.2-alpha.1"
-  resolved "https://registry.npmjs.org/@appsurify-testmap/rrweb/-/rrweb-2.1.2-alpha.1.tgz"
-  integrity sha512-7C8X/q5hagsG6jI8B2h5SkkCELMBd2pFtYocDCjDEFLjvCdQFzJeTYMV6oN6LXmThUGng1HPSbcPLRxoA7kkyg==
+"@appsurify-testmap/rrweb-snapshot@file:../appsurify-rrweb/packages/rrweb-snapshot":
+  version "2.1.3-alpha.2"
   dependencies:
-    "@appsurify-testmap/rrdom" "^2.1.2-alpha.1"
-    "@appsurify-testmap/rrweb-snapshot" "^2.1.2-alpha.1"
-    "@appsurify-testmap/rrweb-types" "^2.1.2-alpha.1"
-    "@appsurify-testmap/rrweb-utils" "^2.1.2-alpha.1"
+    postcss "^8.4.38"
+
+"@appsurify-testmap/rrweb-types@^2.1.3-alpha.2":
+  version "2.1.3-alpha.2"
+  resolved "https://registry.yarnpkg.com/@appsurify-testmap/rrweb-types/-/rrweb-types-2.1.3-alpha.2.tgz#65c8135c1f8a72d105bad9df8168edc0f19f3ec5"
+  integrity sha512-TzDWfsbTgD4ZCzWuSWT9JRfmYkjtLKaCEEt6wWw5QEOZsBueZpMfmOLEMnMNRSF4Yzuo2/3J5drqQA+EjUBciw==
+
+"@appsurify-testmap/rrweb-types@file:../appsurify-rrweb/packages/types":
+  version "2.1.3-alpha.2"
+
+"@appsurify-testmap/rrweb-utils@^2.1.3-alpha.2":
+  version "2.1.3-alpha.2"
+  resolved "https://registry.yarnpkg.com/@appsurify-testmap/rrweb-utils/-/rrweb-utils-2.1.3-alpha.2.tgz#50252391ed7470a758c4a38781f47eede6be9695"
+  integrity sha512-1oLaY+k3KwtZCO1Qh/TtL7Xkv5/MlEddRadV02cc01JQrLWgLiIlF0UN6BcHmqc5zPlwNTsedHTl9pWJjKmVMQ==
+
+"@appsurify-testmap/rrweb@^2.1.3-alpha.2", "@appsurify-testmap/rrweb@file:../appsurify-rrweb/packages/rrweb":
+  version "2.1.3-alpha.2"
+  dependencies:
+    "@appsurify-testmap/rrdom" "^2.1.3-alpha.2"
+    "@appsurify-testmap/rrweb-snapshot" "^2.1.3-alpha.2"
+    "@appsurify-testmap/rrweb-types" "^2.1.3-alpha.2"
+    "@appsurify-testmap/rrweb-utils" "^2.1.3-alpha.2"
     "@types/css-font-loading-module" "0.0.7"
     "@xstate/fsm" "^1.4.0"
     base64-arraybuffer "^1.0.1"

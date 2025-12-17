@@ -20,26 +20,31 @@ export default function ElementList({ playerRef }: Props) {
 
   const { updateSelection } = useSelection();
 
-  // const actions = snapshot?.actions ?? [];
-
-
   if (!snapshot) {
     return <Text color="gray.500">Elements not found</Text>;
   }
+
+  const findCorrespondingAction = (elementId: number) => {
+    return snapshot.actions.find(action => action.elementId === elementId);
+  };
 
   return (
     <>
       <VStack align="stretch" spacing={3}>
         <Box>
-
           <List spacing={2}>
             {snapshot.elements.filter(e => e.isVisible && e.isInteractive).map((element) => {
+              const correspondingAction = findCorrespondingAction(element.id);
 
               return (
                 <ListItem
                   key={element.id}
                   onClick={() => {
-                    updateSelection({ selectedElement: element });
+                    // При клике на элемент списка - только выделение элемента
+                    updateSelection({
+                      selectedElement: element,
+                      selectedAction: null
+                    });
                   }}
                   p={2}
                   borderLeft="4px solid"
@@ -53,7 +58,16 @@ export default function ElementList({ playerRef }: Props) {
                         size='xs'
                         aria-label='open actions'
                         icon={<ExternalLinkIcon />}
-                        disabled={!element.isInteracted}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (correspondingAction) {
+                            updateSelection({
+                              selectedElement: element,
+                              selectedAction: correspondingAction
+                            });
+                          }
+                        }}
+                        isDisabled={!element.isInteracted || !correspondingAction}
                         mr={2}
                     />
                     {(element as elementNode).tagName}
@@ -68,15 +82,12 @@ export default function ElementList({ playerRef }: Props) {
                       xpath: {element.xpath}
                     </Text>
                   )}
-
                 </ListItem>
               );
             })}
           </List>
         </Box>
       </VStack>
-
-
     </>
   );
 }

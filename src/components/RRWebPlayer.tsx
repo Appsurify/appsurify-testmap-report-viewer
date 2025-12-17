@@ -3,6 +3,7 @@ import rrwebPlayer from '@appsurify-testmap/rrweb-player';
 import type {
     eventWithTime,
 } from '@appsurify-testmap/rrweb-types';
+import type { UICoverageAction } from '../report/types';
 import {
     Box
 } from '@chakra-ui/react';
@@ -13,7 +14,7 @@ interface Props {
 }
 
 export interface RRWebPlayerRef {
-  seekToAction: (actionId: number) => void;
+  seekToAction: (action: UICoverageAction) => void;
   seekToTimestamp: (timestamp: number) => void;
   highlightNode: (nodeId: number, color?: string) => void;
   clearHighlight: (nodeId: number) => void;
@@ -54,11 +55,10 @@ const RRWebPlayer = forwardRef<RRWebPlayerRef, Props>(({events}, ref) => {
 
     // Публичные методы
     useImperativeHandle(ref, () => ({
-        seekToAction(actionId: number) {
-            const event = events.find((e: any) => e.id === actionId);
+        seekToAction(action: UICoverageAction) {
             const startTime = this.getMetaData()?.startTime;
-            if (event && playerRef.current && startTime) {
-                playerRef.current.goto(event.timestamp - startTime + 1);
+            if (action && playerRef.current && startTime) {
+                playerRef.current.goto(action.timestamp - startTime + 1);
             }
         },
 
